@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +72,7 @@ public class StudentAndGradeServiceTest {
         assertFalse(collegeStudentOptional.isPresent(), "Student should be deleted and not found");
     }
 
+    @Sql("/insertData.sql")
     @Test
     public void getGradebookService() {
         Iterable<CollegeStudent> iterableCollegeStudents = studentAndGradeService.getGradebook();
@@ -80,7 +82,6 @@ public class StudentAndGradeServiceTest {
             collegeStudents.add(collegeStudent);
         }
 
-        assertEquals(1, collegeStudents.size());
-
+        assertEquals(5, collegeStudents.size());
     }
 }
