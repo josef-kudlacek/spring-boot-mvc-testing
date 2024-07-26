@@ -50,7 +50,7 @@ class GradebookControllerTest {
     private StudentDao studentDao;
 
     @Mock
-    private StudentAndGradeService studentAndGradeServiceMock;
+    private StudentAndGradeService studentCreateServiceMock;
 
     @BeforeAll
     public static void setup() {
@@ -82,10 +82,10 @@ class GradebookControllerTest {
 
         List<CollegeStudent> collegeStudentList = new ArrayList<>(Arrays.asList(collegeStudentOne, collegeStudentTwo));
 
-        when(studentAndGradeServiceMock.getGradebook())
+        when(studentCreateServiceMock.getGradebook())
                 .thenReturn(collegeStudentList);
 
-        assertIterableEquals(collegeStudentList, studentAndGradeServiceMock.getGradebook());
+        assertIterableEquals(collegeStudentList, studentCreateServiceMock.getGradebook());
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/"))
                 .andExpect(status().isOk())
@@ -98,6 +98,15 @@ class GradebookControllerTest {
 
     @Test
     public void createStudentHttpRequest() throws Exception {
+        CollegeStudent collegeStudentOne = new CollegeStudent("Eric", "Roby", "eric_ruby@luv2code_school.com");
+
+        List<CollegeStudent> collegeStudentList = new ArrayList<>(Arrays.asList(collegeStudentOne));
+
+        when(studentCreateServiceMock.getGradebook())
+                .thenReturn(collegeStudentList);
+
+        assertIterableEquals(studentCreateServiceMock.getGradebook(), collegeStudentList);
+
         MvcResult mvcResult = this.mockMvc.perform(post("/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("firstname", request.getParameterValues("firstname"))

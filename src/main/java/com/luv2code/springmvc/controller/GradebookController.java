@@ -34,6 +34,8 @@ public class GradebookController {
     public String createStudent(@ModelAttribute("student") CollegeStudent collegeStudent, Model model) {
         studentAndGradeService.createStudent(collegeStudent.getFirstname(), collegeStudent.getLastname(),
                 collegeStudent.getEmailAddress());
+        Iterable<CollegeStudent> collegeStudents = studentAndGradeService.getGradebook();
+        model.addAttribute("students", collegeStudents);
         return "index";
     }
 
