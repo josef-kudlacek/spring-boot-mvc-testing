@@ -27,4 +27,10 @@ public class StudentAndGradeService {
 
         return optionalStudentDao.isPresent();
     }
+
+    public void deleteStudent(int id) {
+        if (checkIfStudentIsNull(id)) {
+            studentDao.deleteById(id);
+        }
+    }
 }
