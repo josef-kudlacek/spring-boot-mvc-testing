@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -19,5 +20,11 @@ public class StudentAndGradeService {
         collegeStudent.setId(0);
 
         studentDao.save(collegeStudent);
+    }
+
+    public boolean checkIfStudentIsNull(int id) {
+        Optional<CollegeStudent> optionalStudentDao = studentDao.findById(id);
+
+        return optionalStudentDao.isPresent();
     }
 }
