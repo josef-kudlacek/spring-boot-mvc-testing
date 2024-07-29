@@ -1,9 +1,6 @@
 package com.luv2code.springmvc.service;
 
-import com.luv2code.springmvc.models.CollegeStudent;
-import com.luv2code.springmvc.models.HistoryGrade;
-import com.luv2code.springmvc.models.MathGrade;
-import com.luv2code.springmvc.models.ScienceGrade;
+import com.luv2code.springmvc.models.*;
 import com.luv2code.springmvc.repository.HistoryGradeDao;
 import com.luv2code.springmvc.repository.MathGradeDao;
 import com.luv2code.springmvc.repository.ScienceGradeDao;
@@ -157,5 +154,19 @@ public class StudentAndGradeServiceTest {
     public void deleteGradeServiceReturnStudentIdIsZero() {
         assertEquals(0, studentAndGradeService.deleteGrade(0, "science"), "No students should have 0 id");
         assertEquals(0, studentAndGradeService.deleteGrade(1, "literature"), "No student should have a literature class");
+    }
+
+    @Test
+    public void studentInformation() {
+        GradebookCollegeStudent gradebookCollegeStudent = studentAndGradeService.studentInformation(1);
+
+        assertNotNull(gradebookCollegeStudent);
+        assertEquals(1, gradebookCollegeStudent.getId());
+        assertEquals("Karel", gradebookCollegeStudent.getFirstname());
+        assertEquals("Macha", gradebookCollegeStudent.getLastname());
+        assertEquals("karel.macha@gmail.com", gradebookCollegeStudent.getEmailAddress());
+        assertTrue(gradebookCollegeStudent.getStudentGrades().getMathGradeResults().size() == 1);
+        assertTrue(gradebookCollegeStudent.getStudentGrades().getScienceGradeResults().size() == 1);
+        assertTrue(gradebookCollegeStudent.getStudentGrades().getHistoryGradeResults().size() == 1);
     }
 }
