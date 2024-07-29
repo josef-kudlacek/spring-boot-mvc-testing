@@ -83,4 +83,49 @@ public class GradebookController {
         return "index";
     }
 
+    @PostMapping("/grades")
+    public String createGrade(@RequestParam("grade") double grade,
+                              @RequestParam("gradeType") String gradeType,
+                              @RequestParam("studentId") int studentId,
+                              Model model) {
+        if (!studentAndGradeService.checkIfStudentIsNull(studentId)) {
+            return "error";
+        }
+
+        boolean isGradeCreated = studentAndGradeService.createGrade(grade, studentId, gradeType);
+
+        if (!isGradeCreated) {
+            return "error";
+        }
+
+        GradebookCollegeStudent studentEntity = studentAndGradeService.studentInformation(studentId);
+        model.addAttribute("student", studentEntity);
+        if (!studentEntity.getStudentGrades().getMathGradeResults().isEmpty()) {
+            model.addAttribute("mathAverage", studentEntity.getStudentGrades().findGradePointAverage(
+                    studentEntity.getStudentGrades().getMathGradeResults()
+            ));
+        } else {
+            model.addAttribute("mathAverage", "N/A");
+        }
+
+        if (!studentEntity.getStudentGrades().getScienceGradeResults().isEmpty()) {
+            model.addAttribute("scienceAverage", studentEntity.getStudentGrades().findGradePointAverage(
+                    studentEntity.getStudentGrades().getScienceGradeResults()
+            ));
+        } else {
+            model.addAttribute("scienceAverage", "N/A");
+        }
+
+        if (!studentEntity.getStudentGrades().getHistoryGradeResults().isEmpty()) {
+            model.addAttribute("historyAverage", studentEntity.getStudentGrades().findGradePointAverage(
+                    studentEntity.getStudentGrades().getHistoryGradeResults()
+            ));
+        } else {
+            model.addAttribute("historyAverage", "N/A");
+        }
+
+        return "studentInformation";
+
+    }
+
 }
