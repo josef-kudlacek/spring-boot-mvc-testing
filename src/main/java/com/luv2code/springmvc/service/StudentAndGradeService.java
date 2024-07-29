@@ -101,4 +101,19 @@ public class StudentAndGradeService {
 
         return false;
     }
+
+    public int deleteGrade(int gradeId, String gradeType) {
+        int studentId = 0;
+
+        if (gradeType.equals("math")) {
+            Optional<MathGrade> grade = mathGradeDao.findById(gradeId);
+            if (!grade.isPresent()) {
+                return studentId;
+            }
+            studentId = grade.get().getStudentId();
+            mathGradeDao.deleteById(gradeId);
+        }
+
+        return studentId;
+    }
 }
