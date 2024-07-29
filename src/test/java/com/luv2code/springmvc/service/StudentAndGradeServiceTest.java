@@ -169,4 +169,11 @@ public class StudentAndGradeServiceTest {
         assertTrue(gradebookCollegeStudent.getStudentGrades().getScienceGradeResults().size() == 1);
         assertTrue(gradebookCollegeStudent.getStudentGrades().getHistoryGradeResults().size() == 1);
     }
+
+    @Test
+    public void studentInformationServiceReturnNull() {
+        GradebookCollegeStudent gradebookCollegeStudent = studentAndGradeService.studentInformation(0);
+
+        assertNull(gradebookCollegeStudent, "Student should not to be found with 0 id");
+    }
 }

@@ -141,7 +141,11 @@ public class StudentAndGradeService {
     }
 
     public GradebookCollegeStudent studentInformation(int studentId) {
-        Optional<CollegeStudent> student = studentDao.findById(studentId);
+        if (!checkIfStudentIsNull(studentId)) {
+            return null;
+        }
+
+        CollegeStudent student = studentDao.findById(studentId).get();
         Iterable<MathGrade> mathGrades = mathGradeDao.findGradeByStudentId(studentId);
         Iterable<ScienceGrade> scienceGrades = scienceGradeDao.findGradeByStudentId(studentId);
         Iterable<HistoryGrade> historyGrades = historyGradeDao.findGradeByStudentId(studentId);
@@ -157,10 +161,8 @@ public class StudentAndGradeService {
         studentGrades.setScienceGradeResults(scienceGradesList);
         studentGrades.setHistoryGradeResults(historyGradesList);
 
-        GradebookCollegeStudent gradebookCollegeStudent = new GradebookCollegeStudent(
-                studentId, student.get().getFirstname(), student.get().getLastname(), student.get().getEmailAddress(),
-                studentGrades
+        return new GradebookCollegeStudent(
+                studentId, student.getFirstname(), student.getLastname(), student.getEmailAddress(), studentGrades
         );
-        return gradebookCollegeStudent;
     }
 }
