@@ -139,4 +139,10 @@ public class StudentAndGradeServiceTest {
         assertEquals(1, studentAndGradeService.deleteGrade(1, "science"), "Returns student id after delete science grade");
         assertEquals(1, studentAndGradeService.deleteGrade(1, "history"), "Returns student id after delete history grade");
     }
+
+    @Test
+    public void deleteGradeServiceReturnStudentIdIsZero() {
+        assertEquals(0, studentAndGradeService.deleteGrade(0, "science"), "No students should have 0 id");
+        assertEquals(0, studentAndGradeService.deleteGrade(1, "literature"), "No student should have a literature class");
+    }
 }
