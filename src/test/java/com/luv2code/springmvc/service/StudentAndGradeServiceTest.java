@@ -116,4 +116,12 @@ public class StudentAndGradeServiceTest {
         assertTrue(scienceGrades.iterator().hasNext(), "Student has math grades");
         assertTrue(historyGrades.iterator().hasNext(), "Student has math grades");
     }
+
+    @Test
+    public void createGradeServiceReturnFalse() {
+        assertFalse(studentAndGradeService.createGrade(105, 1, "math"));
+        assertFalse(studentAndGradeService.createGrade(-5, 1, "math"));
+        assertFalse(studentAndGradeService.createGrade(80.50, 2, "math"));
+        assertFalse(studentAndGradeService.createGrade(80.50, 2, "literature"));
+    }
 }
