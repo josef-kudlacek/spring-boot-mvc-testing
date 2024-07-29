@@ -9,6 +9,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
@@ -43,24 +44,44 @@ public class StudentAndGradeServiceTest {
     @Autowired
     private HistoryGradeDao historyGradeDao;
 
+    @Value("${sql.script.create.student}")
+    private String sqlAddStudent;
+
+    @Value("${sql.script.create.math.grade}")
+    private String sqlAddMathGrade;
+
+    @Value("${sql.script.create.science.grade}")
+    private String sqlAddScienceGrade;
+
+    @Value("${sql.script.create.history.grade}")
+    private String sqlAddHistoryGrade;
+
+    @Value("${sql.script.delete.student}")
+    private String sqlDeleteStudent;
+
+    @Value("${sql.script.delete.math.grade}")
+    private String sqlDeleteMathGrade;
+
+    @Value("${sql.script.delete.science.grade}")
+    private String sqlDeleteScienceGrade;
+
+    @Value("${sql.script.delete.history.grade}")
+    private String sqlDeleteHistoryGrade;
+
     @BeforeEach
     public void setUpDatabase() {
-        jdbcTemplate.execute("""
-                INSERT INTO STUDENT(ID, FIRSTNAME, LASTNAME, EMAIL_ADDRESS)
-                VALUES (1, 'Karel', 'Macha', 'karel.macha@gmail.com')
-                """);
-
-        jdbcTemplate.execute("INSERT INTO MATH_GRADE(ID, STUDENT_ID, GRADE) VALUES (1, 1, 100.00)");
-        jdbcTemplate.execute("INSERT INTO SCIENCE_GRADE(ID, STUDENT_ID, GRADE) VALUES (1, 1, 100.00)");
-        jdbcTemplate.execute("INSERT INTO HISTORY_GRADE(ID, STUDENT_ID, GRADE) VALUES (1, 1, 100.00)");
+        jdbcTemplate.execute(sqlAddStudent);
+        jdbcTemplate.execute(sqlAddMathGrade);
+        jdbcTemplate.execute(sqlAddScienceGrade);
+        jdbcTemplate.execute(sqlAddHistoryGrade);
     }
 
     @AfterEach
     public void deleteData() {
-        jdbcTemplate.execute("DELETE FROM student");
-        jdbcTemplate.execute("DELETE FROM MATH_GRADE");
-        jdbcTemplate.execute("DELETE FROM SCIENCE_GRADE");
-        jdbcTemplate.execute("DELETE FROM HISTORY_GRADE");
+        jdbcTemplate.execute(sqlDeleteStudent);
+        jdbcTemplate.execute(sqlDeleteMathGrade);
+        jdbcTemplate.execute(sqlDeleteScienceGrade);
+        jdbcTemplate.execute(sqlDeleteHistoryGrade);
     }
 
     @Test
