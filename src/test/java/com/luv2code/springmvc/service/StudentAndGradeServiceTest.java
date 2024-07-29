@@ -1,8 +1,13 @@
-package com.luv2code.springmvc;
+package com.luv2code.springmvc.service;
 
 import com.luv2code.springmvc.models.CollegeStudent;
+import com.luv2code.springmvc.models.HistoryGrade;
+import com.luv2code.springmvc.models.MathGrade;
+import com.luv2code.springmvc.models.ScienceGrade;
+import com.luv2code.springmvc.repository.HistoryGradeDao;
+import com.luv2code.springmvc.repository.MathGradeDao;
+import com.luv2code.springmvc.repository.ScienceGradeDao;
 import com.luv2code.springmvc.repository.StudentDao;
-import com.luv2code.springmvc.service.StudentAndGradeService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +35,15 @@ public class StudentAndGradeServiceTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private MathGradeDao mathGradeDao;
+
+    @Autowired
+    private ScienceGradeDao scienceGradeDao;
+
+    @Autowired
+    private HistoryGradeDao historyGradeDao;
 
     @BeforeEach
     public void setUpDatabase() {
@@ -83,5 +97,23 @@ public class StudentAndGradeServiceTest {
         }
 
         assertEquals(5, collegeStudents.size());
+    }
+
+    @Test
+    public void createGradeService() {
+        // Create the grade
+        assertTrue(studentAndGradeService.createGrade(80.50, 1, "math"));
+        assertTrue(studentAndGradeService.createGrade(90.25, 1, "science"));
+        assertTrue(studentAndGradeService.createGrade(60.75, 1, "history"));
+
+        // Get all grades with studentId
+        Iterable<MathGrade> mathGrades = mathGradeDao.findGradeByStudentId(1);
+        Iterable<ScienceGrade> scienceGrades = scienceGradeDao.findGradeByStudentId(1);
+        Iterable<HistoryGrade> historyGrades = historyGradeDao.findGradeByStudentId(1);
+
+        // Verify there is grades
+        assertTrue(mathGrades.iterator().hasNext(), "Student has math grades");
+        assertTrue(scienceGrades.iterator().hasNext(), "Student has math grades");
+        assertTrue(historyGrades.iterator().hasNext(), "Student has math grades");
     }
 }
