@@ -18,6 +18,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,11 +52,18 @@ public class StudentAndGradeServiceTest {
                 INSERT INTO STUDENT(ID, FIRSTNAME, LASTNAME, EMAIL_ADDRESS)
                 VALUES (1, 'Karel', 'Macha', 'karel.macha@gmail.com')
                 """);
+
+        jdbcTemplate.execute("INSERT INTO MATH_GRADE(ID, STUDENT_ID, GRADE) VALUES (1, 1, 100.00)");
+        jdbcTemplate.execute("INSERT INTO SCIENCE_GRADE(ID, STUDENT_ID, GRADE) VALUES (1, 1, 100.00)");
+        jdbcTemplate.execute("INSERT INTO HISTORY_GRADE(ID, STUDENT_ID, GRADE) VALUES (1, 1, 100.00)");
     }
 
     @AfterEach
     public void deleteData() {
         jdbcTemplate.execute("DELETE FROM student");
+        jdbcTemplate.execute("DELETE FROM MATH_GRADE");
+        jdbcTemplate.execute("DELETE FROM SCIENCE_GRADE");
+        jdbcTemplate.execute("DELETE FROM HISTORY_GRADE");
     }
 
     @Test
@@ -112,9 +120,9 @@ public class StudentAndGradeServiceTest {
         Iterable<HistoryGrade> historyGrades = historyGradeDao.findGradeByStudentId(1);
 
         // Verify there is grades
-        assertTrue(mathGrades.iterator().hasNext(), "Student has math grades");
-        assertTrue(scienceGrades.iterator().hasNext(), "Student has math grades");
-        assertTrue(historyGrades.iterator().hasNext(), "Student has math grades");
+        assertTrue(((Collection<MathGrade>) mathGrades).size() == 2, "Student has two math grades");
+        assertTrue(((Collection<ScienceGrade>) scienceGrades).size() == 2, "Student has two science grades");
+        assertTrue(((Collection<HistoryGrade>) historyGrades).size() == 2, "Student has two history grades");
     }
 
     @Test
