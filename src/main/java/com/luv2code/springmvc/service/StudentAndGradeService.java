@@ -8,6 +8,7 @@ import com.luv2code.springmvc.repository.StudentDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -164,5 +165,34 @@ public class StudentAndGradeService {
         return new GradebookCollegeStudent(
                 studentId, student.getFirstname(), student.getLastname(), student.getEmailAddress(), studentGrades
         );
+    }
+
+    public void configureStudentInformationModel(int studentId, Model model) {
+        GradebookCollegeStudent studentEntity = studentInformation(studentId);
+        model.addAttribute("student", studentEntity);
+
+        if (!studentEntity.getStudentGrades().getMathGradeResults().isEmpty()) {
+            model.addAttribute("mathAverage", studentEntity.getStudentGrades().findGradePointAverage(
+                    studentEntity.getStudentGrades().getMathGradeResults()
+            ));
+        } else {
+            model.addAttribute("mathAverage", "N/A");
+        }
+
+        if (!studentEntity.getStudentGrades().getScienceGradeResults().isEmpty()) {
+            model.addAttribute("scienceAverage", studentEntity.getStudentGrades().findGradePointAverage(
+                    studentEntity.getStudentGrades().getScienceGradeResults()
+            ));
+        } else {
+            model.addAttribute("scienceAverage", "N/A");
+        }
+
+        if (!studentEntity.getStudentGrades().getHistoryGradeResults().isEmpty()) {
+            model.addAttribute("historyAverage", studentEntity.getStudentGrades().findGradePointAverage(
+                    studentEntity.getStudentGrades().getHistoryGradeResults()
+            ));
+        } else {
+            model.addAttribute("historyAverage", "N/A");
+        }
     }
 }
